@@ -1,13 +1,24 @@
-import sqlite3
+import sqlite3,logging,sys
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
+
+# Logging basic config STDOUT and DEBUG
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(levelname)s:%(name)s:%(asctime)s, %(message)s',
+    datefmt='%m/%d/%Y, %H:%M:%S',
+    handlers=[logging.StreamHandler(sys.stdout)]
+
+)
 
 # Function to get a database connection.
 # This function connects to database with the name `database.db`
 def get_db_connection():
     connection = sqlite3.connect('database.db')
     connection.row_factory = sqlite3.Row
+    global db_connection_count
+    db_connection_count += 1 
     return connection
 
 # Function to get a post using its ID
@@ -18,9 +29,18 @@ def get_post(post_id):
     connection.close()
     return post
 
+def get_amount_of_posts():
+    connection = get_db_connection()
+    post_count = (connection.execute('SELECT count(*) FROM posts').fetchone())[0]
+    connection.close()
+    return post_count
+
 # Define the Flask application
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
+
+# APP VARIABLES
+db_connection_count = 0
 
 # Define the main route of the web application 
 @app.route('/')
@@ -64,6 +84,26 @@ def create():
             return redirect(url_for('index'))
 
     return render_template('create.html')
+
+#health check
+@app.route('/healthz')
+def healthz():
+    response = app.response_class(
+        response=json.dumps({"result": "OK - healthy"}),
+        status=200,
+        mimetype='application/json'
+    )
+    app.logger.info('Status request successfull')
+    return response
+
+@app.route('/metrics')
+def metrics():
+    response = app.response_class(
+        status=200,
+        response=json.dumps({"db_connection_count": db_connection_count,
+                             "post_count": get_amount_of_posts()})
+    )
+    return response
 
 # start the application on port 3111
 if __name__ == "__main__":

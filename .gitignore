@@ -4,3 +4,5 @@
 .myvenv/
 __pycache__/
 .vagrant/
+nd064_course_1.code-workspace
+database.db
