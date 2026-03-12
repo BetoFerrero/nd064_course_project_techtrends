@@ -1,0 +1,17 @@
+
+myenv/
+.env/
+.venv/
+.myvenv/
+
+
+__pycache__/
+*.db
+.vagrant/
+
+
+.vscode/
+*.code-workspace
+
+
+*.log
