@@ -1,0 +1,11 @@
+apiVersion: v2
+name: techtrends
+description: techtrends chart
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - techtrends
+maintainers:
+  - name: Alberto
+    email: albertoferrerosanchez@gmail.com
