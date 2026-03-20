@@ -1,15 +1,15 @@
 namespace:
-  name: prod
+  name: sandbox
 
-replicaCount: 5
+replicaCount: 1
 
 image:
   repository: b370/techtrends
   tag: latest
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 service:
-  port: 7111
+  port: 4111
   targetPort: 3111
   protocol: TCP
   type: ClusterIP
@@ -18,10 +18,10 @@ containerPort: 3111
 
 resources:
   requests:
-    memory: "128Mi"
-    cpu: "350m"
+    memory: "64Mi"
+    cpu: "250m"
   limits:
-    memory: "256Mi"
+    memory: "128Mi"
     cpu: "500m"
 
 livenessProbe:

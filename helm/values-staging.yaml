@@ -1,15 +1,15 @@
 namespace:
-  name: prod
+  name: staging
 
-replicaCount: 5
+replicaCount: 3
 
 image:
   repository: b370/techtrends
   tag: latest
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 service:
-  port: 7111
+  port: 5111
   targetPort: 3111
   protocol: TCP
   type: ClusterIP
@@ -18,10 +18,10 @@ containerPort: 3111
 
 resources:
   requests:
-    memory: "128Mi"
-    cpu: "350m"
+    memory: "90Mi"
+    cpu: "300m"
   limits:
-    memory: "256Mi"
+    memory: "128Mi"
     cpu: "500m"
 
 livenessProbe:
